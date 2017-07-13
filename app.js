@@ -1,34 +1,59 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 
-var index = require('./routes/index');
+const auth = require('./libs/authenticator');
+const indexRoute = require('./routes/index');
+const userRoute = require('./routes/user');
 
-var app = express();
+const app = express();
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+connectToDatabase();
+initExpressApp(app);
 
-app.use('/', index);
+async function connectToDatabase() {
+    try {
+        await mongoose.connect('mongodb://localhost/snipphub')
+        console.log('Connected to database');
+    } catch (err) {
+        console.error(err.message);
+    }
+}
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+function initExpressApp(app) {
+    app.use(logger('dev'));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    initRoutes(app);
+}
 
-  // render the error page
-  res.status(err.status || 500);
-  res.json(res.locals.error);
-});
+function initRoutes(app) {
+    app.use('/', indexRoute);
+    app.use('/user', auth.validateRequest(), userRoute);
+
+    // catch 404 and forward to error handler
+    app.use(function (req, res, next) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    });
+
+    // error handler
+    app.use(function (err, req, res, next) {
+        // set locals, only providing error in development
+        res.locals.message = err.message;
+        res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+        // render the error page
+        res.status(err.status || 500);
+        res.json(res.locals.error);
+    });
+}
 
 module.exports = app;

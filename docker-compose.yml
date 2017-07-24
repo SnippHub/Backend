@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   snipphub-backend:
-    image: snipphub-backend
+    image: snipphub-backend:prod
     build: .
     ports:
       - 3000:3000
@@ -11,8 +11,8 @@ services:
   mongo:
     image: mongo:latest
     volumes:
-      - snipphub-data:/data/db
+      - snipphub-data-prod:/data/db
     ports:
       - 27017:27017
 volumes:
-  snipphub-data:
+  snipphub-data-prod:

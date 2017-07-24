@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   snipphub-backend:
-    image: snipphub-backend
+    image: snipphub-backend:dev
     build: .
     environment:
       NODE_ENV: development
@@ -17,8 +17,8 @@ services:
   mongo:
     image: mongo:latest
     volumes:
-      - snipphub-data:/data/db
+      - snipphub-data-dev:/data/db
     ports:
       - 27017:27017
 volumes:
-  snipphub-data:
+  snipphub-data-dev:

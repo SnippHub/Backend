@@ -22,11 +22,9 @@ UserSchema.plugin(passportLocalMongoose, {
     usernameField: 'email',
 
     passwordValidator(password, cb) {
-        var {
-            error
-        } = Joi.validate(password, passwordValidation.registerUser.body.password);
+        var result = Joi.validate(password, passwordValidation.registerUser.body.password);
 
-        cb(error);
+        cb(result.error);
     }
 });
 

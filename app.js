@@ -8,6 +8,7 @@ mongoose.Promise = require('bluebird');
 const auth = require('./libs/authenticator');
 const indexRoute = require('./routes/index');
 const userRoute = require('./routes/user');
+const snippetsRoute = require('./routes/snippets');
 
 const app = express();
 
@@ -41,6 +42,7 @@ function initExpressApp(app) {
 function initRoutes(app) {
     app.use('/', indexRoute);
     app.use('/user', auth.validateRequest(), userRoute);
+    app.use('/snippets', auth.validateRequest(), snippetsRoute);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

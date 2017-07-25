@@ -1,15 +1,15 @@
 version: "3.3"
 
 services:
-  snipphub-backend:
-    image: snipphub-backend:prod
+  snipphub-api:
+    image: snipphub-api:prod
     build: .
     ports:
       - 3000:3000
     depends_on:
-      - mongo
-  mongo:
-    image: mongo:latest
+      - snipphub-db
+  snipphub-db:
+    image: mongo:3.4
     volumes:
       - snipphub-data-prod:/data/db
     ports:

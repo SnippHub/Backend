@@ -1,8 +1,8 @@
 version: "3.3"
 
 services:
-  snipphub-backend:
-    image: snipphub-backend:dev
+  snipphub-api:
+    image: snipphub-api:dev
     build: .
     environment:
       NODE_ENV: development
@@ -13,9 +13,9 @@ services:
       - .:/usr/src/app
     command: ./node_modules/.bin/nodemon --inspect=0.0.0.0 ./bin/www
     depends_on:
-      - mongo
-  mongo:
-    image: mongo:latest
+      - snipphub-db
+  snipphub-db:
+    image: mongo:3.4
     volumes:
       - snipphub-data-dev:/data/db
     ports:

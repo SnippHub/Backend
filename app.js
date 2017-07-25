@@ -16,7 +16,7 @@ initExpressApp(app);
 
 async function connectToDatabase() {
     try {
-        await mongoose.connect('mongodb://mongo/snipphub', {
+        await mongoose.connect('mongodb://snipphub-db/snipphub', {
             server: {
                 reconnectTries: Number.MAX_VALUE
             }

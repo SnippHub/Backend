@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
 
 const auth = require('./libs/authenticator');
 const indexRoute = require('./routes/index');
@@ -12,21 +10,21 @@ const snippetsRoute = require('./routes/snippets');
 
 const app = express();
 
-connectToDatabase();
+// connectToDatabase();
 initExpressApp(app);
 
 async function connectToDatabase() {
-    try {
-        await mongoose.connect('mongodb://snipphub-db/snipphub', {
-            server: {
-                reconnectTries: Number.MAX_VALUE
-            }
-        })
-        console.log('Connected to database');
-    } catch (err) {
-        console.error(err.message);
-        setTimeout(connectToDatabase, 5000);
-    }
+    // try {
+    //     await mongoose.connect('mongodb://snipphub-db/snipphub', {
+    //         server: {
+    //             reconnectTries: Number.MAX_VALUE
+    //         }
+    //     })
+    //     console.log('Connected to database');
+    // } catch (err) {
+    //     console.error(err.message);
+    //     setTimeout(connectToDatabase, 5000);
+    // }
 }
 
 function initExpressApp(app) {

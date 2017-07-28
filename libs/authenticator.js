@@ -5,7 +5,7 @@ const expressJwt = require('express-jwt');
 
 Promise.promisifyAll(jwt);
 
-const authConfig = require('../config').authenticator;
+const authConfig = require('../config/app').authenticator;
 
 class Authenticator {
     constructor(authConfig) {

@@ -15,10 +15,22 @@ services:
     depends_on:
       - snipphub-db
   snipphub-db:
-    image: mongo:3.4
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: snipphub
+      POSTGRES_PASSWORD: snipphub
     volumes:
-      - snipphub-data-dev:/data/db
+      - snipphub-data-dev:/var/lib/postgresql/data
     ports:
-      - 27017:27017
+      - 5432:5432
+  snipphub-db-admin-gui:
+    image: fenglc/pgadmin4
+    environment:
+      DEFAULT_USER: snipphub
+      DEFAULT_PASSWORD: snipphub
+    ports:
+      - 5050:5050
+    depends_on:
+      - snipphub-db
 volumes:
   snipphub-data-dev:

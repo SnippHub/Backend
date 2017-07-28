@@ -1,17 +1,15 @@
 const express = require('express');
 
-const Snippet = require('../models/snippet');
-
 const router = express.Router();
 
 router.get('/:id', async(req, res, next) => {
-    try {
-        var snippet = await Snippet.findByIdAsync(req.params.id);
+    // try {
+    //     var snippet = await Snippet.findByIdAsync(req.params.id);
 
-        res.json(snippet);
-    } catch (err) {
-        next(err);
-    }
+    //     res.json(snippet);
+    // } catch (err) {
+    //     next(err);
+    // }
 });
 
 module.exports = router;

@@ -1,0 +1,17 @@
+{
+  "development": {
+    "username": "snipphub",
+    "password": "snipphub",
+    "database": "snipphub",
+    "host": "snipphub-db",
+    "dialect": "postgres",
+    "migrationStorage": "sequelize"
+  },
+  "production": {
+    "username": "snipphub",
+    "password": "snipphub",
+    "database": "snipphub",
+    "host": "snipphub-db",
+    "dialect": "postgres"
+  }
+}

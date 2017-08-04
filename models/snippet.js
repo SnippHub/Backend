@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   var Snippet = sequelize.define('Snippet', {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
     deprecationText: DataTypes.STRING
   }, {
     classMethods: {
-      associate: function (models) {
+      associate: function(models) {
         // associations can be defined here
       }
     }

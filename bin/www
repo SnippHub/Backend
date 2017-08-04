@@ -7,33 +7,9 @@
 const app = require('../app');
 const debug = require('debug')('snipphub-backend:server');
 const http = require('http');
-const Umzug = require('umzug');
 
 const models = require("../models");
 
-const umzug = new Umzug({
-    storage: 'sequelize',
-    storageOptions: {
-        sequelize: models.sequelize,
-    },
-
-    // see: https://github.com/sequelize/umzug/issues/17
-    migrations: {
-        params: [
-            models.sequelize.getQueryInterface(), // queryInterface
-            models.sequelize.constructor, // DataTypes
-            function () {
-                throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
-            }
-        ],
-        path: './migrations',
-        pattern: /\.js$/
-    },
-
-    logging: function () {
-        console.log.apply(null, arguments);
-    },
-});
 /**
  * Get port from environment and store in Express.
  */
@@ -47,8 +23,7 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-setTimeout(connectToDatabase, 20000);
-// connectToDatabase();
+connectToDatabase();
 
 /**
  * Normalize a port into a number, string, or false.
@@ -112,15 +87,10 @@ function onListening() {
 
 function connectToDatabase() {
     return models.sequelize.sync().then(function () {
-        console.log('Connected to database. Starting migrations...');
-
-        // First connect then execute all migrations.
-        return umzug.up().then(function (result) {
-            console.log('Finished migrations. Starting api...');
-            server.listen(port);
-            server.on('error', onError);
-            server.on('listening', onListening);
-        });
+        console.log('Connected to database.');
+        server.listen(port);
+        server.on('error', onError);
+        server.on('listening', onListening);
     }).catch(() => {
         console.log('Connection refused. Trying to reconnect in 5 seconds.');
         setTimeout(connectToDatabase, 5000);

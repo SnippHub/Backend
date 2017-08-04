@@ -11,7 +11,7 @@ services:
       - 9229:9229
     volumes:
       - .:/usr/src/app
-    command: ./node_modules/.bin/nodemon --inspect=0.0.0.0 ./bin/www
+    command: ["./wait-for-it.sh", "snipphub-db:5432", "--", "./start-dev.sh"]
     depends_on:
       - snipphub-db
   snipphub-db:

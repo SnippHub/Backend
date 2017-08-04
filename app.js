@@ -10,22 +10,7 @@ const snippetsRoute = require('./routes/snippets');
 
 const app = express();
 
-// connectToDatabase();
 initExpressApp(app);
-
-async function connectToDatabase() {
-    // try {
-    //     await mongoose.connect('mongodb://snipphub-db/snipphub', {
-    //         server: {
-    //             reconnectTries: Number.MAX_VALUE
-    //         }
-    //     })
-    //     console.log('Connected to database');
-    // } catch (err) {
-    //     console.error(err.message);
-    //     setTimeout(connectToDatabase, 5000);
-    // }
-}
 
 function initExpressApp(app) {
     app.use(logger('dev'));

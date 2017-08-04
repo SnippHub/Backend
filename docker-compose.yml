@@ -6,6 +6,7 @@ services:
     build: .
     ports:
       - 3000:3000
+    command: ["./wait-for-it.sh", "snipphub-db:5432", "--", "./start-prod.sh"]
     depends_on:
       - snipphub-db
   snipphub-db:

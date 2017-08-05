@@ -42,7 +42,7 @@ function initRoutes(app) {
 
         // render the error page
         res.status(err.status || 500);
-        res.json(res.locals.error);
+        res.json(res.locals.message);
     });
 }
 

@@ -2,8 +2,7 @@ const express = require('express');
 const validate = require('express-validation')
 
 const auth = require('../libs/authenticator');
-const User = require('../models/user');
-
+const db = require('../models');
 const userValidation = require('../validators/user');
 
 const router = express.Router();
@@ -39,17 +38,18 @@ router.post('/login', validate(userValidation.loginUser), async(req, res, next) 
 
 router.post('/register', validate(userValidation.registerUser), async(req, res, next) => {
     try {
-        var {
-            email,
-            password,
-            name
-        } = req.body;
+        var existingUser = await db.User.findOne({
+            where: {
+                email: req.body.email
+            }
+        });
 
-        var user = await User.registerAsync({
-            email,
-            name
-        }, password);
-        var token = await auth.createToken(user);
+        if (existingUser) {
+            return res.sendStatus(409);
+        }
+
+        var createdUser = await db.User.create(req.body);
+        var token = await auth.createToken(createdUser);
 
         res.json({
             token

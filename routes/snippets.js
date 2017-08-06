@@ -34,20 +34,11 @@ router.get('/', async(req, res, next) => {
 
 router.post('/', async(req, res, next) => {
     try {
-        var user = await db.user.findById(req.user.sub);
+        req.body.creatorId = req.user.sub;
 
-        if (!user) {
-            return res.sendStatus(400);
-        }
-
-        var snippet = await user.createSnippet(req.body, {
+        var snippet = await db.snippet.create(req.body, {
             include: ['files', 'tags']
-        })
-
-        // var snippet = await db.snippet.build(req.body, {
-        //     include: ['files', 'tags']
-        // });
-
+        });
 
         res.json(snippet);
     } catch (err) {

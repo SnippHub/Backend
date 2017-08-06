@@ -1,13 +1,16 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var GlobalTag = sequelize.define('GlobalTag', {
-    text: DataTypes.TEXT
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
+module.exports = function (sequelize, DataTypes) {
+  const GlobalTag = sequelize.define('globalTag', {
+    text: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     }
   });
+
+  GlobalTag.associate = function (models) {
+
+  };
+
   return GlobalTag;
 };

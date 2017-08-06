@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/login', validate(userValidation.loginUser), async(req, res, next) => {
     try {
-        var user = await db.User.findOne({
+        var user = await db.user.findOne({
             where: {
                 email: req.body.email
             }
@@ -37,7 +37,7 @@ router.post('/login', validate(userValidation.loginUser), async(req, res, next) 
 
 router.post('/register', validate(userValidation.registerUser), async(req, res, next) => {
     try {
-        var existingUser = await db.User.findOne({
+        var existingUser = await db.user.findOne({
             where: {
                 email: req.body.email
             }
@@ -47,12 +47,50 @@ router.post('/register', validate(userValidation.registerUser), async(req, res, 
             return res.sendStatus(409);
         }
 
-        var createdUser = await db.User.create(req.body);
+        var createdUser = await db.user.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+        });
+
         var token = await auth.createToken(createdUser);
 
         res.json({
             token
         });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post('/test', async(req, res, next) => {
+    try {
+        var snippet = await db.snippet.create({
+            title: req.body.title,
+            creatorId: req.body.creatorId,
+            tags: req.body.tags
+        }, {
+            include: [
+                db.snippet.tags
+            ]
+        });
+
+        res.sendStatus(200);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/test', async(req, res, next) => {
+    try {
+        var snippet = await db.snippet.findAll({
+            include: ['tags', {
+                association: db.snippet.creator,
+                attributes: ['name']
+            }]
+        });
+
+        res.json(snippet);
     } catch (err) {
         next(err);
     }

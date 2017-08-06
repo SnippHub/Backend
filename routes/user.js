@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/profile', async(req, res, next) => {
     try {
-        var user = await db.User.findById(req.user.sub, {
+        var user = await db.user.findById(req.user.sub, {
             attributes: ['isAdmin', 'name', 'isEditor']
         });
 

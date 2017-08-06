@@ -2,10 +2,17 @@
 const bcrypt = require('bcrypt');
 
 module.exports = function (sequelize, DataTypes) {
-  const User = sequelize.define('User', {
-    email: DataTypes.STRING,
+  const User = sequelize.define('user', {
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
     password: DataTypes.STRING,
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     isEditor: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -32,7 +39,9 @@ module.exports = function (sequelize, DataTypes) {
   });
 
   User.associate = function (models) {
-
+    User.snippets = User.hasMany(models.snippet, {
+      foreignKey: 'creatorId'
+    });
   };
 
   User.prototype.validatePassword = function (password) {

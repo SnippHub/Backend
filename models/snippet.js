@@ -1,17 +1,40 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var Snippet = sequelize.define('Snippet', {
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    visible: DataTypes.BOOLEAN,
+module.exports = function (sequelize, DataTypes) {
+  const Snippet = sequelize.define('snippet', {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: DataTypes.TEXT,
+    visible: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
     deprecated: DataTypes.BOOLEAN,
     deprecationText: DataTypes.STRING
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
   });
+
+  Snippet.associate = function (models) {
+    Snippet.tags = Snippet.hasMany(models.tag, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+
+    Snippet.files = Snippet.hasMany(models.file, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+
+    Snippet.creator = Snippet.belongsTo(models.user, {
+      as: 'creator',
+      foreignKey: {
+        name: 'creatorId',
+        allowNull: false
+      }
+    });
+  };
+
   return Snippet;
 };

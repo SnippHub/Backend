@@ -10,11 +10,7 @@ router.get('/profile', async(req, res, next) => {
             attributes: ['isAdmin', 'name', 'isEditor']
         });
 
-        res.json({
-            isAdmin: user.isAdmin,
-            name: user.name,
-            tags: user.tags
-        });
+        res.json(user);
     } catch (err) {
         next(err);
     }

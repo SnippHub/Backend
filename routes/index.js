@@ -9,28 +9,27 @@ const router = express.Router();
 
 router.post('/login', validate(userValidation.loginUser), async(req, res, next) => {
     try {
-        var {
-            email,
-            password
-        } = req.body;
-
-        var user = await User.findByUsernameAsync(email);
-
-        if (user) {
-            var passwordValid = await user.authenticateAsync(password);
-
-            if (!passwordValid) {
-                return res.sendStatus(400);
+        var user = await db.User.findOne({
+            where: {
+                email: req.body.email
             }
+        });
 
-            var token = await auth.createToken(user);
-
-            res.json({
-                token
-            });
-        } else {
-            res.sendStatus(404);
+        if (!user) {
+            return res.sendStatus(404);
         }
+
+        var passwordValid = await user.validatePassword(req.body.password);
+
+        if (!passwordValid) {
+            return res.sendStatus(400);
+        }
+
+        var token = await auth.createToken(user);
+
+        res.json({
+            token
+        });
     } catch (err) {
         return next(err);
     }

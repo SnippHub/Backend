@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 
 module.exports = function (sequelize, DataTypes) {
-  var User = sequelize.define('User', {
+  const User = sequelize.define('User', {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     name: DataTypes.STRING,
@@ -22,11 +22,6 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: true,
     }
   }, {
-    classMethods: {
-      associate: function (models) {
-        // associations can be defined here
-      }
-    },
     setterMethods: {
       password(newPassword) {
         var hashedPw = bcrypt.hashSync(newPassword, 10);
@@ -35,5 +30,14 @@ module.exports = function (sequelize, DataTypes) {
       },
     }
   });
+
+  User.associate = function (models) {
+
+  };
+
+  User.prototype.validatePassword = function (password) {
+    return bcrypt.compareSync(password, this.password);
+  }
+
   return User;
 };
